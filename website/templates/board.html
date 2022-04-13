@@ -1,0 +1,20 @@
+{% extends "base.html" %} {% block title %}Display Board{% endblock %}
+
+{% block content %}
+<h2>Lists Board</h2>
+
+<ul class="list-group list-group-flash" id="notes">
+	{% for note in query %}
+	<li class="list-group-item">
+		{{ note.date }} &emsp; {{ note.userID }} &emsp; {{ note.data }} 
+		{% if note.img is not none %}
+		<div align='center'>
+			<img src="data:image/jpeg;base64,{{ note.img }}" height="150px" />
+		</div>
+		{% endif %}
+	</li>
+	{% endfor %}
+
+</ul>
+
+{% endblock %}
