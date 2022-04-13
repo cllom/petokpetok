@@ -27,7 +27,10 @@ def home():
 			else:
 				print("adding image")
 				dataPIL = Image.open(io.BytesIO(data))
-				dataPIL = dataPIL.resize((350, 150), Image.NEAREST)
+				w, h = dataPIL.size
+				resized_width = 624
+				resized_height = (resized_width / w) *h
+				dataPIL = dataPIL.resize((resized_width, resized_height), Image.NEAREST)
 				# data = request.files['image-upload'].read()
 				buffered = io.BytesIO()
 				dataPIL.save(buffered, format="PNG")

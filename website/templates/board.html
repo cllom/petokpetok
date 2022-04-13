@@ -9,7 +9,7 @@
 		{{ note.date }} &emsp; {{ note.userID }} &emsp; {{ note.data }} 
 		{% if note.img is not none %}
 		<div align='center'>
-			<img src="data:image/jpeg;base64,{{ note.img }}" height="150px" />
+			<img src="data:image/jpeg;base64,{{ note.img }}" width="85%" />
 		</div>
 		{% endif %}
 	</li>
