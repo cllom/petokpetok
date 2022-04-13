@@ -29,7 +29,7 @@ def home():
 				dataPIL = Image.open(io.BytesIO(data))
 				w, h = dataPIL.size
 				resized_width = 624
-				resized_height = (resized_width / w) *h
+				resized_height = int((resized_width / w) *h)
 				dataPIL = dataPIL.resize((resized_width, resized_height), Image.NEAREST)
 				# data = request.files['image-upload'].read()
 				buffered = io.BytesIO()

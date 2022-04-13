@@ -6,10 +6,10 @@
 <ul class="list-group list-group-flash" id="notes">
 	{% for note in query %}
 	<li class="list-group-item">
-		{{ note.date }} &emsp; {{ note.userID }} &emsp; {{ note.data }} 
+		{{ note.date }} &emsp; {{ note.data }} 
 		{% if note.img is not none %}
 		<div align='center'>
-			<img src="data:image/jpeg;base64,{{ note.img }}" width="85%" />
+			<img src="data:image/jpeg;base64,{{ note.img }}" width="70%" />
 		</div>
 		{% endif %}
 	</li>
