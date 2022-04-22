@@ -10,6 +10,11 @@ The app was deployed using Amazon Elastic Beanstalk - [My events dashboard](http
 
 
 ## Deploying locally
+First install the required libraries (python 3.9)
+```bash
+pip install -r requirements.txt
+```
+Next launch the flask app
 ```bash
 python application.py
 ```
