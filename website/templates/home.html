@@ -1,12 +1,15 @@
 {% extends "base.html" %} {% block title %}Edit{% endblock %}
 
 {% block content %}
-<h1>Notes</h1>
+<h2>Event Creation</h2>
 
 <ul class="list-group list-group-flash" id="notes">
 	{% for note in user.notes %}
-	<li class="list-group-item">
+	<li class="list-group-item d-flex justify-content-between align-items-center">
 		{{ note.date}} &emsp; {{ note.data }} 
+		{% if note.img is not none %}
+			<img src="data:image/jpeg;base64,{{ note.img }}" width="100px" />
+		{% endif %}
 		<button class="close" type="button" onclick="deleteNote({{ note.id }})">
 			<span aria-hidden="true">&times;</span>
 		</button>
@@ -23,7 +26,7 @@
 
 	<textarea name="note" id="note" class="form-control"></textarea>
 	<div align="center">
-		<button type="submit" class="btn btn-primary">Add Note</button>
+		<button type="submit" class="btn btn-primary">Add Event</button>
 	</div>
 </form>
 {% endblock %}

@@ -4,7 +4,7 @@ from os import path
 from flask_login import LoginManager
 
 db = SQLAlchemy()
-DB_NAME = "database.db"
+DB_NAME = "database_test.db"
 # DB_NAME = "database_with_imgTEXT.db"
 
 

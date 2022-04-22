@@ -10,6 +10,7 @@ class Note(db.Model):
 	img = db.Column(db.TEXT)
 	date = db.Column(db.DateTime(timezone=True), default=func.now())
 	userID = db.Column(db.Integer, db.ForeignKey('user.id'))
+	userName = db.Column(db.String)
 
 
 class User(db.Model, UserMixin):

@@ -3,6 +3,6 @@ function deleteNote(noteID) {
 		method: 'POST',
 		body: JSON.stringify({ noteID: noteID}),
 	}).then((_res) => {
-		window.location.href = '/';
+		window.location.href = '/edit';
 	});
 }
