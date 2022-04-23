@@ -3,7 +3,7 @@ import io
 from flask import Blueprint, flash, jsonify, render_template, request
 from flask_login import login_required, current_user
 from .models import Note
-from . import db
+from . import db, upload2s3
 import json
 from PIL import Image
 
@@ -48,6 +48,7 @@ def edit():
 			db.session.add(new_note)
 			db.session.commit()
 			flash("Note added successfully", category='success')
+			upload2s3()
 
 	return render_template("home.html", user=current_user)
 
@@ -60,6 +61,7 @@ def delete_note():
 		if note.userID == current_user.id:
 			db.session.delete(note)
 			db.session.commit()
+			upload2s3()
 			return jsonify({})
 	pass
 
