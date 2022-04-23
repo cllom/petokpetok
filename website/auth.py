@@ -22,9 +22,9 @@ def login():
 				flash("Incorrect password, try again", category='error')
 		else:
 			flash("Email does not exist", category='error')
-	data = request.form
-	print(data)
-	return render_template("login.html", text="Tetsing", user=current_user)
+	# data = request.form
+	# print(data) # Debug
+	return render_template("login.html", user=current_user)
 
 @auth.route('/logout')
 @login_required
@@ -45,15 +45,14 @@ def sign_up():
 
 		if user:
 			flash("This email already exists", category='error')
-
 		if len(email) < 4:
 			flash("Email must be greater than 3 characters.", category='error')
 		elif len(firstName) < 2:
 			flash("First name must be greater than 2 characters.", category='error')
 		elif password1 != password2:
 			flash("Passwords do not match.", category='error')
-		elif len(password1) < 7:
-			flash("Passwords need to be atleast 7 characters long.", category='error')
+		elif len(password1) < 6:
+			flash("Passwords need to be atleast 6 characters long.", category='error')
 		else:
 			new_user = User(email=email, firstName=firstName, password=generate_password_hash(password1, method='sha256'))
 			db.session.add(new_user)
