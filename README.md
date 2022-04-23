@@ -24,6 +24,7 @@ python application.py
 ### Learnings/Notes
 - AWS scans for the variable `application` for deployment, so the Flask App bokject cannot bet named anything else
 - AWS by default has a 3MB upload limit. This can be changed by specifying an `nginx` configuration file `<custom_config>.conf`, and an additional config file `<custom_config>.config` that tells the container to reload `nginx`
+- [Elastic beanstalk access to s3](https://aws.amazon.com/premiumsupport/knowledge-center/elastic-beanstalk-s3-bucket-instance/)
 
 
 
