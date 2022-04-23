@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import db
+from . import db, upload2s3
 from flask_login import login_user, login_required, logout_user, current_user
 
 auth = Blueprint('auth', __name__)
@@ -45,7 +45,7 @@ def sign_up():
 
 		if user:
 			flash("This email already exists", category='error')
-		if len(email) < 4:
+		elif len(email) < 4:
 			flash("Email must be greater than 3 characters.", category='error')
 		elif len(firstName) < 2:
 			flash("First name must be greater than 2 characters.", category='error')
@@ -57,8 +57,9 @@ def sign_up():
 			new_user = User(email=email, firstName=firstName, password=generate_password_hash(password1, method='sha256'))
 			db.session.add(new_user)
 			db.session.commit()
+			upload2s3()
 			flash("Account created!", category='success')
-			return redirect(url_for('views.login'))
+			return redirect(url_for('auth.login'))
 
 	return render_template("signup.html", user=current_user)
 
