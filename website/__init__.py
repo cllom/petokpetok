@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
 import boto3
+import botocore
 
 
 db = SQLAlchemy()
@@ -41,10 +42,25 @@ def create_app():
 
 
 def create_database(app):
-	if not path.exists('website/' + DB_NAME):
-		db.create_all(app=app)
-		print("Created database")
-	upload2s3()
+
+	try:
+		print("checking S3")
+		s3_resource.Object('social-media-data-base', DB_NAME).load()
+	except botocore.exceptions.ClientError as e:
+		if e.response['Error']['Code'] == "404":
+			print("caught error")
+			# The object does not exist.
+			if not path.exists('website/' + DB_NAME):
+				db.create_all(app=app)
+				print("Created database")
+				upload2s3()
+		#else:
+			# Something else has gone wrong.
+		#	raise
+	else:
+		# The object does exist.
+		s3_resource.Object('social-media-data-base', DB_NAME).download_file(f'website/{DB_NAME}')
+		print("Downloaded db from S3")
 	
 
 def upload2s3():
