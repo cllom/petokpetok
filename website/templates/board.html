@@ -1,20 +1,32 @@
 {% extends "base.html" %} {% block title %}Display Board{% endblock %}
 
 {% block content %}
+
+<!-- Header-->
+<header class="bg-white py-3">
+	<div class="container px-4 px-lg-5 my-2">
+		<div class="text-center text-black">
+			<p class="fw-bolder">Cherish moments and share the love!</p>
+			<p class="lead fw-normal text-black-50 mb-0">Make memories together. ❤️ </p>
+		</div>
+	</div>
+</header>
+
 <h2>Board</h2>
 
 <ul class="list-group list-group-flash" id="notes">
 	{% for note in query %}
 	<li class="list-group-item">
-		{{ note.date }} &emsp; {{ note.userName }}
+		{{ note.userName }}
 		<div align='center'> 
-			<b>{{ note.data }}</b>
+			<font size="+1"><b>{{ note.data }}</b></font>
 		</div> 
 		{% if note.img is not none %}
 		<div align='center'>
-			<img src="data:image/jpeg;base64,{{ note.img }}" width="70%" />
+			<img src="data:image/jpeg;base64,{{ note.img }}" width="60%" />
 		</div>
 		{% endif %}
+		<font size="-3">{{ note.date }} </font>
 	</li>
 	{% endfor %}
 
