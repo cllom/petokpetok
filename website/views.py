@@ -68,3 +68,7 @@ def delete_note():
 @views.route('/about')
 def about():
 	return render_template("about.html", user=current_user)
+
+@views.route('/services')
+def services():
+	return render_template("services.html", user=current_user)
