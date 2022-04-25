@@ -84,8 +84,8 @@ jobs:
       # Create the Elastic Beanstalk application
       - name: Create EBS application
         run: |
-          eb init -p python-3.8 thomas --region us-east-1
+          eb init -p python-3.8 hello-world --region us-east-1
       # Deploy to (or Create) the Elastic Beanstalk environment
       - name: Create test environment & deploy
         run: |
-          (eb use thomas-environment && eb status thomas-environment && eb deploy) || eb create thomas-environment
+          (eb use test-environment && eb status test-environment && eb deploy) || eb create test-environment

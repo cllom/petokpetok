@@ -7,7 +7,7 @@ import botocore
 
 
 db = SQLAlchemy()
-DB_NAME = "thomas.db"
+DB_NAME = "database.db"
 # DB_NAME = "database_with_imgTEXT.db"
 
 s3_resource = boto3.resource('s3')
