@@ -74,5 +74,5 @@ def services():
 	return render_template("services.html", user=current_user)
 
 @views.route('/users')
-def services():
+def users():
 	return render_template("users.html", user=current_user)
