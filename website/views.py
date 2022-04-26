@@ -35,7 +35,7 @@ def edit():
 				# print("adding image") # debug
 				dataPIL = Image.open(io.BytesIO(data))
 				w, h = dataPIL.size
-				resized_width = 624
+				resized_width = 1200
 				resized_height = int((resized_width / w) *h)
 				dataPIL = dataPIL.resize((resized_width, resized_height), Image.NEAREST)
 				buffered = io.BytesIO()

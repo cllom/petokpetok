@@ -7,7 +7,7 @@ import botocore
 
 
 db = SQLAlchemy()
-DB_NAME = "database.db"
+DB_NAME = "tania.db"
 # DB_NAME = "database_with_imgTEXT.db"
 
 s3_resource = boto3.resource('s3')
@@ -42,7 +42,6 @@ def create_app():
 
 
 def create_database(app):
-
 	try:
 		print("checking S3")
 		s3_resource.Object('social-media-data-base', DB_NAME).load()
