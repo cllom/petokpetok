@@ -29,7 +29,6 @@ def login():
 @auth.route('/logout')
 @login_required
 def logout():
-	# return "<p>Logout</p>"
 	logout_user()
 	return redirect(url_for('auth.login'))
 
@@ -39,7 +38,7 @@ def sign_up():
 		email = request.form.get('email')
 		firstName = request.form.get('firstName')
 		password1 = request.form.get('password1')
-		password2 = request.form.get('password1')
+		password2 = request.form.get('password2')
 
 		user = User.query.filter_by(email=email).first()
 

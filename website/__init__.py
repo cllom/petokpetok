@@ -42,6 +42,13 @@ def create_app():
 
 
 def create_database(app):
+	"""
+	# The object does not exist.
+	if not path.exists('website/' + DB_NAME):
+		db.create_all(app=app)
+		print("Created database")
+
+	"""
 	try:
 		print("checking S3")
 		s3_resource.Object('social-media-data-base', DB_NAME).load()
@@ -62,8 +69,8 @@ def create_database(app):
 		print("Downloaded db from S3")
 	
 
+
+
 def upload2s3():
-	s3_resource.Bucket('social-media-data-base').upload_file(
-	Filename='website/' + DB_NAME, Key=DB_NAME)
+	s3_resource.Bucket('social-media-data-base').upload_file(Filename='website/' + DB_NAME, Key=DB_NAME)
 	print("Updated db in S3")
-	

@@ -6,8 +6,8 @@
 <header class="bg-white py-3">
 	<div class="container px-4 px-lg-5 my-2">
 		<div class="text-center text-black">
-			<p>This is to our beloved mama and papa. </p>
-			<p class="lead fw-normal text-black-50 mb-0">Corry Ningsih Bhakti and Edy Suhen </p>
+			<p>This is to our beloved papa and mama. </p>
+			<p class="lead fw-normal text-black-50 mb-0">Edy Suhen and Corry Ningsih Bhakti </p>
 			<p></p>
 			<p class="fw-bolder">Cherish moments and share the love! Make memories together. ❤️</p>
 		</div>
@@ -17,7 +17,7 @@
 <h2>Board</h2>
 
 <ul class="list-group list-group-flash" id="notes">
-	{% for note in query %}
+	{% for note in query.items %}
 	<li class="list-group-item">
 		{{ note.userName }}
 		<div align='center'> 
@@ -31,6 +31,44 @@
 		<font size="-3">{{ note.date }} </font>
 	</li>
 	{% endfor %}
-
 </ul>
+
+<!-- Pagination Links-->
+<div class="text-left mt-3">
+    <a href="{{ url_for('views.home', page=query.prev_num) }}"
+       class="btn btn-outline-dark 
+       {% if query.page == 1 %}disabled{% endif %}">
+        &laquo;
+    </a>
+<!-- Loop through the number of pages to display a link for each-->
+    {% for page_num in query.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+{% if page_num %}
+<!-- Check for the active page and set the link to "Active"-->
+            {% if query.page == page_num %}
+            <a href="{{ url_for('views.home', page=page_num) }}"
+               class="btn btn-dark">
+                {{ page_num }}
+            </a>
+            {% else %}
+            <a href="{{ url_for('views.home', page=page_num) }}"
+               class="btn btn-outline-dark">
+                {{ page_num }}
+            </a>
+            {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}
+    <a href="{{ url_for('views.home', page=query.next_num) }}"
+       class="btn btn-outline-dark 
+       {% if query.page == query.pages %}disabled{% endif %}">
+        &raquo;
+    </a>
+	<p class="text-left mt-2">
+		Showing page {{ query.page }} of {{ query.pages }}
+	</p>
+</div>
+
+
+
 {% endblock %}
