@@ -10,7 +10,7 @@ class Note(db.Model):
 	img = db.Column(db.TEXT)
 	date = db.Column(db.DateTime(timezone=True), default=func.now())
 	userID = db.Column(db.Integer, db.ForeignKey('user.id'))
-	boardID = db.Column(db.Integer, db.ForeignKey('board.id'))
+	boardName = db.Column(db.String, db.ForeignKey('board.url'))
 	userName = db.Column(db.String)
 
 
@@ -21,7 +21,7 @@ class User(db.Model, UserMixin):
 	firstName = db.Column(db.String(150))
 	notes = db.relationship('Note')
 	boards = db.relationship('Board')
-	isAdmin = db.Column(db.Integer)
+	# isAdmin = db.Column(db.Integer)
 
 class Board(db.Model):
 	id = db.Column(db.Integer, primary_key=True)

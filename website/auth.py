@@ -58,7 +58,7 @@ def sign_up():
 			db.session.add(new_user)
 			db.session.commit()
 			
-			new_board = Board(userID=new_user.id, url=new_user.firstName)
+			new_board = Board(userID=new_user.id, url=new_user.firstName.lower())
 			db.session.add(new_board)
 			db.session.commit()
 			# upload2s3()

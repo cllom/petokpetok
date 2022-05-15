@@ -8,7 +8,7 @@ from flask_login import LoginManager
 
 # Base = declarative_base()
 db = SQLAlchemy()
-DB_NAME = "start_fresh.db"
+DB_NAME = "new_database.db"
 # DB_NAME = "database_with_imgTEXT.db"
 
 # s3_resource = boto3.resource('s3')

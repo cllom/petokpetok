@@ -14,7 +14,7 @@ views = Blueprint('views', __name__)
 
 @views.route('/')
 def home():
-	query = Note.query.filter_by(boardID=None).order_by(db.desc(Note.date)).all()
+	query = Note.query.filter_by(boardName=None).order_by(db.desc(Note.date)).all()
 	# print(query)
 	return render_template("board.html", user=current_user, query=query)
 
@@ -80,47 +80,31 @@ def services():
 def users():
 	return render_template("users.html", user=current_user)
 
-####################
+############################################################################
 # USER #
-@views.route('/<userName>/<boardName>')
+
+@views.route('/<boardName>')
 @login_required
-def userBoard(userName, boardName):
-	userID = User.query.filter_by(firstName=userName).first().id
-	currBoard = Board.query.filter_by(url=boardName, userID=userID).first()
+def userBoard(boardName):
+	# userID = User.query.filter_by(firstName=userName).first().id
+	currBoard = Board.query.filter_by(url=boardName, userID=current_user.id).first()
 	print(current_user.boards, currBoard)
 	if currBoard in current_user.boards:
 		print("One step closer")
-		query = Note.query.filter_by(boardID=currBoard.id).order_by(db.desc(Note.date)).all()
+		query = Note.query.filter_by(boardName=boardName).order_by(db.desc(Note.date)).all()
 		print(query)
 		return render_template("userBoard.html", user=current_user, query=query, boardName=boardName)
 	else:
 		flash("You do not have access to view", category="error")
 		return ("OOPS! You do not have access to view!")
 		# return redirect(url_for('views.home'))
-
-	# if userName == current_user.firstName:
-	# 	bDatabase = f'{current_user.firstName}_{boardName}.db'
-	# 	print(bDatabase)
-	# 	if path.exists('website/' + bDatabase):
-	# 		print("true")
-	# 		engine = create_engine(f'sqlite:///{bDatabase}')
-	# 		session = Session(engine)
-	# 		try:
-	# 			query = session.query(Note).order_by(db.desc(Note.date)).all()
-	# 		finally:
-	# 			session.close
-	# 		return render_template("userBoard.html", user=current_user, query=query)
-	# 	else:
-	# 		return ("OOPS!")
-	# else:
-	# 	flash("You do not have access to view", category="error")
 	# 	return redirect(url_for('views.home'))
 
-@views.route('/<userName>/<boardName>/edit', methods=['GET', 'POST'])
+@views.route('/<boardName>/edit', methods=['GET', 'POST'])
 @login_required
-def boardEdit(userName, boardName):
-	userID = User.query.filter_by(firstName=userName).first().id
-	currBoard = Board.query.filter_by(url=boardName, userID=userID).first()
+def boardEdit(boardName):
+	# userID = User.query.filter_by(firstName=userName).first().id
+	currBoard = Board.query.filter_by(url=boardName, userID=current_user.id).first()
 	if currBoard in current_user.boards:
 		if request.method == 'POST':
 			note = request.form.get('note')
@@ -134,7 +118,7 @@ def boardEdit(userName, boardName):
 			else:
 			# If no image, continue
 				if img.filename == '':
-					new_note = Note(data=note, userID=current_user.id, userName=current_user.firstName, boardID=currBoard.id)
+					new_note = Note(data=note, userID=current_user.id, userName=current_user.firstName, boardName=boardName)
 				else:
 					# print("adding image") # debug
 					dataPIL = Image.open(io.BytesIO(data))
@@ -149,41 +133,73 @@ def boardEdit(userName, boardName):
 					buffered.seek(0)
 
 					base64Img = b64encode(buffered.read()).decode("ascii")
-					new_note = Note(data=note, userID=current_user.id, img=base64Img, userName=current_user.firstName, boardID=currBoard.id)
+					new_note = Note(data=note, userID=current_user.id, img=base64Img, userName=current_user.firstName, boardName=currBoard.url)
 					
 				db.session.add(new_note)
 				db.session.commit()
 				flash("Note added successfully", category='success')
 				# upload2s3()
-		# print(f"currBoard.id : {currBoard.id}")
-		# for note in current_user.notes:
-		# 	print(type(note.boardID), type(currBoard.id))
-		# 	if note.boardID == currBoard.id:
-		# 		print(note.data)
-		return render_template("home.html", user=current_user, board=currBoard.id)
+
+		return render_template("home.html", user=current_user, board=currBoard.url)
 
 	else:
-		flash(f"You do not have access to {userName}/{boardName}", category="error")
+		flash(f"You do not have access to {boardName}", category="error")
 		return redirect(url_for('views.edit'))
 
+@views.route('/join-board', methods=['GET', 'POST'])
+@login_required
+def join_board():
+	if request.method == 'POST':
+		boardName = request.form.get('boardName')
+		# userName = request.form.get('userName')
+		print(f"Received: {boardName}")
+		boardExists = Board.query.filter_by(url=boardName).first()
+		userinBoard = Board.query.filter_by(url=boardName, userID=current_user.id).first()
+		print(userinBoard)
+		if boardExists and not userinBoard:
+			# print(current_user.boards.query.filter_)
+			new_board = Board(userID=current_user.id, url=boardName)
+			db.session.add(new_board)
+			db.session.commit()
+			flash(f"Successfully added you to {boardName}", category='success')
+		elif userinBoard:
+			flash(f"You are already signed up to this board", category='error')
+			return redirect(url_for('views.userBoard', boardName=boardName))
+		else:
+			flash(f"{boardName} does not exist", category='error')
+		
 
+	return render_template("join_board.html", user=current_user)
+	userID = User.query.filter_by(firstName=userName).first().id
+	currBoard = Board.query.filter_by(url=boardName, userID=userID).first()
+	print(current_user.boards, currBoard)
+	if currBoard in current_user.boards:
+		print("Add users here")
+		query = User.query.filter_by(boards=currBoard).all()
+		print(query)
+		return render_template("userBoard.html", user=current_user, query=query, boardName=boardName)
+	else:
+		flash("You do not have access to view", category="error")
+		return ("OOPS! You do not have access to view!")
+		# return redirect(url_for('views.home'))
 
 @views.route('/create', methods=['POST'])
 @login_required
 def create():
 	boardName = request.form.get('boardName')
 	# Check if boardName already exists
-	new_board = Board(userID=current_user.id, url=boardName)
-	db.session.add(new_board)
-	db.session.commit()
-	flash("New board created!", category='success')
+	boardExists = Board.query.filter_by(url=boardName)
+	if boardExists:
+		flash("This board name already exists", category='error')
+	else:
+		new_board = Board(userID=current_user.id, url=boardName)
+		db.session.add(new_board)
+		db.session.commit()
+		flash("New board created!", category='success')
 	# bDatabase = f'{current_user.firstName}_{boardName}.db'
+		return redirect(url_for('views.edit'))
 	print(boardName)
-	# if not path.exists('website/' + bDatabase):
-	# 	engine = create_engine(f'sqlite:///website/{bDatabase}')
-	# 	# engine.connect()
-	# 	db.create_all(engine)
-	return redirect(url_for('views.edit'))
+
 	# return f"Cannot create with {boardName}"
 
 
