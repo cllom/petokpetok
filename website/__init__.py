@@ -17,10 +17,7 @@ def create_app():
 	app = Flask(__name__)
 	app.config['SECRET_KEY'] = 'hshsh kaldklakdal12'
 	app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
-# 	app.config['SQLALCHEMY_BINDS'] = {
-#     'users':        'sqlite:///users',
-#     'appmeta':      'sqlite:///appmeta.db'
-# }
+
 	db.init_app(app)
 
 	from .views import views
@@ -60,9 +57,9 @@ def create_database(app):
 				db.create_all(app=app)
 				print("Created database")
 				upload2s3()
-		else:
-			# Something else has gone wrong.
-			raise
+		# else:
+		# 	# Something else has gone wrong.
+		# 	raise
 	else:
 		# The object does exist.
 		s3_resource.Object('social-media-data-base', DB_NAME).download_file(f'website/{DB_NAME}')
