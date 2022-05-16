@@ -1,6 +1,7 @@
 {% extends "base.html" %} 
 {% block title %} {{ user.firstName }} | {{ boardName }} {% endblock %}
-{% block navName %} {{ user.firstName }} {% endblock %}
+{% block navName %} 
+<a class="navbar-brand" href="/{{boardName}}">{{ user.firstName }}</a> {% endblock %}
 
 
 {% block content %}

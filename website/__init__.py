@@ -46,9 +46,9 @@ def create_app():
 
 
 def create_database(app):
-	if not path.exists('website/' + DB_NAME):
-		db.create_all(app=app)
-		print("Created database")
+	# if not path.exists('website/' + DB_NAME):
+	# 	db.create_all(app=app)
+	# 	print("Created database")
 	try:
 		print("checking S3")
 		s3_resource.Object('social-media-data-base', DB_NAME).load()

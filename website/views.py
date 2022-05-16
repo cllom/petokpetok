@@ -2,20 +2,24 @@ from base64 import b64encode
 import io
 from flask import Blueprint, flash, jsonify, redirect, render_template, request, url_for
 from flask_login import login_required, current_user
-# from sqlalchemy import create_engine
-# from sqlalchemy.orm import Session
 from .models import Board, Note, User
 from . import db
 import json
 from PIL import Image
-# from os import path
+
 
 views = Blueprint('views', __name__)
+
+ROWS_PER_PAGE = 5
 
 @views.route('/')
 def home():
 	query = Note.query.filter_by(boardName=None).order_by(db.desc(Note.date)).all()
 	# print(query)
+	# Set the pagination configuration
+	page = request.args.get('page', 1, type=int)
+	#query = Note.query.order_by(db.desc(Note.date)).all()
+	query = Note.query.order_by(db.desc(Note.date)).paginate(page=page, per_page=ROWS_PER_PAGE)
 	return render_template("board.html", user=current_user, query=query)
 
 @views.route('/edit', methods=['GET', 'POST'])
