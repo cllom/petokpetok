@@ -2,13 +2,13 @@ from base64 import b64encode
 import io
 from flask import Blueprint, flash, jsonify, redirect, render_template, request, url_for
 from flask_login import login_required, current_user
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
+# from sqlalchemy import create_engine
+# from sqlalchemy.orm import Session
 from .models import Board, Note, User
 from . import db
 import json
 from PIL import Image
-from os import path
+# from os import path
 
 views = Blueprint('views', __name__)
 
@@ -83,12 +83,13 @@ def users():
 ############################################################################
 # USER #
 
-@views.route('/<boardName>')
+@views.route('/<string:boardName>')
 @login_required
 def userBoard(boardName):
+	print(boardName)
 	# userID = User.query.filter_by(firstName=userName).first().id
 	currBoard = Board.query.filter_by(url=boardName, userID=current_user.id).first()
-	print(current_user.boards, currBoard)
+	# print(current_user.boards, currBoard, boardName)
 	if currBoard in current_user.boards:
 		print("One step closer")
 		query = Note.query.filter_by(boardName=boardName).order_by(db.desc(Note.date)).all()
@@ -96,8 +97,8 @@ def userBoard(boardName):
 		return render_template("userBoard.html", user=current_user, query=query, boardName=boardName)
 	else:
 		flash("You do not have access to view", category="error")
-		return ("OOPS! You do not have access to view!")
-		# return redirect(url_for('views.home'))
+		# return ("OOPS! You do not have access to view!")
+		return redirect(url_for('views.home'))
 	# 	return redirect(url_for('views.home'))
 
 @views.route('/<boardName>/edit', methods=['GET', 'POST'])
@@ -170,25 +171,26 @@ def join_board():
 		
 
 	return render_template("join_board.html", user=current_user)
-	userID = User.query.filter_by(firstName=userName).first().id
-	currBoard = Board.query.filter_by(url=boardName, userID=userID).first()
-	print(current_user.boards, currBoard)
-	if currBoard in current_user.boards:
-		print("Add users here")
-		query = User.query.filter_by(boards=currBoard).all()
-		print(query)
-		return render_template("userBoard.html", user=current_user, query=query, boardName=boardName)
-	else:
-		flash("You do not have access to view", category="error")
-		return ("OOPS! You do not have access to view!")
-		# return redirect(url_for('views.home'))
+	# userID = User.query.filter_by(firstName=userName).first().id
+	# currBoard = Board.query.filter_by(url=boardName, userID=userID).first()
+	# print(current_user.boards, currBoard)
+	# if currBoard in current_user.boards:
+	# 	print("Add users here")
+	# 	query = User.query.filter_by(boards=currBoard).all()
+	# 	print(query)
+	# 	return render_template("userBoard.html", user=current_user, query=query, boardName=boardName)
+	# else:
+	# 	flash("You do not have access to view", category="error")
+	# 	return ("OOPS! You do not have access to view!")
+	# 	# return redirect(url_for('views.home'))
 
 @views.route('/create', methods=['POST'])
 @login_required
 def create():
 	boardName = request.form.get('boardName')
 	# Check if boardName already exists
-	boardExists = Board.query.filter_by(url=boardName)
+	boardExists = Board.query.filter_by(url=boardName).first()
+	print(boardExists)
 	if boardExists:
 		flash("This board name already exists", category='error')
 	else:
@@ -197,7 +199,8 @@ def create():
 		db.session.commit()
 		flash("New board created!", category='success')
 	# bDatabase = f'{current_user.firstName}_{boardName}.db'
-		return redirect(url_for('views.edit'))
+		return redirect(url_for('views.boardEdit', boardName=boardName))
+	return redirect(url_for('views.join_board'))
 	print(boardName)
 
 	# return f"Cannot create with {boardName}"

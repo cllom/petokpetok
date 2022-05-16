@@ -4,15 +4,18 @@
 {% block content %}
 
 <h2 class="nav-item nav-link">Your Boards</h2>
-		<a type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter">
+		<a type="button" class="btn btn-outline-dark my-2" data-toggle="modal" data-target="#exampleModalCenter">
 			Create a new board
 		</a>
-		<a type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#joinModalCenter">
+		<a type="button" class="btn btn-outline-primary my-2" data-toggle="modal" data-target="#joinModalCenter">
 			Join an existing board
 		</a>
-		{% for bb in user.boards %}
-		<a class="dropdown-item" href="/{{ bb.url }}"> {{ bb.url }} </a>
-		{% endfor %}
+		<div class="list-group col-lg-auto">
+
+			{% for bb in user.boards %}
+			<a class="list-group-item" href="/{{ bb.url }}"> <h5>{{ bb.url.capitalize() }} </h5> </a>
+			{% endfor %}
+		</div>
 
 
 		<!-- Modal -->

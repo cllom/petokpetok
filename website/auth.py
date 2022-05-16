@@ -12,7 +12,7 @@ def login():
 		email = request.form.get('email')
 		password = request.form.get('password')
 
-		user = User.query.filter_by(email=email).first()
+		user = User.query.filter_by(email=email.lower()).first()
 		if user:
 			if check_password_hash(user.password, password):
 				flash("Logged in successfully", category='success')
@@ -54,7 +54,7 @@ def sign_up():
 		elif len(password1) < 6:
 			flash("Passwords need to be atleast 6 characters long.", category='error')
 		else:
-			new_user = User(email=email, firstName=firstName, password=generate_password_hash(password1, method='sha256'))
+			new_user = User(email=email.lower(), firstName=firstName, password=generate_password_hash(password1, method='sha256'))
 			db.session.add(new_user)
 			db.session.commit()
 			
