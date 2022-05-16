@@ -14,12 +14,11 @@ ROWS_PER_PAGE = 5
 
 @views.route('/')
 def home():
-	query = Note.query.filter_by(boardName=None).order_by(db.desc(Note.date)).all()
 	# print(query)
 	# Set the pagination configuration
 	page = request.args.get('page', 1, type=int)
 	#query = Note.query.order_by(db.desc(Note.date)).all()
-	query = Note.query.order_by(db.desc(Note.date)).paginate(page=page, per_page=ROWS_PER_PAGE)
+	query = Note.query.filter_by(boardName=None).order_by(db.desc(Note.date)).paginate(page=page, per_page=ROWS_PER_PAGE)
 	return render_template("board.html", user=current_user, query=query)
 
 @views.route('/edit', methods=['GET', 'POST'])

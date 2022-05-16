@@ -31,4 +31,40 @@
 	{% endfor %}
 
 </ul>
+
+<!-- Pagination Links-->
+<div class="text-left mt-3">
+	<a href="{{ url_for('views.home', page=query.prev_num) }}"
+		 class="btn btn-outline-dark 
+		 {% if query.page == 1 %}disabled{% endif %}">
+			&laquo;
+	</a>
+<!-- Loop through the number of pages to display a link for each-->
+	{% for page_num in query.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+{% if page_num %}
+<!-- Check for the active page and set the link to "Active"-->
+					{% if query.page == page_num %}
+					<a href="{{ url_for('views.home', page=page_num) }}"
+						 class="btn btn-dark">
+							{{ page_num }}
+					</a>
+					{% else %}
+					<a href="{{ url_for('views.home', page=page_num) }}"
+						 class="btn btn-outline-dark">
+							{{ page_num }}
+					</a>
+					{% endif %}
+			{% else %}
+					...
+			{% endif %}
+	{% endfor %}
+	<a href="{{ url_for('views.home', page=query.next_num) }}"
+		 class="btn btn-outline-dark 
+		 {% if query.page == query.pages %}disabled{% endif %}">
+			&raquo;
+	</a>
+<p class="text-left mt-2">
+	Showing page {{ query.page }} of {{ query.pages }}
+</p>
+</div>
 {% endblock %}
