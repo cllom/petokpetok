@@ -95,8 +95,9 @@ def userBoard(boardName):
 	# print(current_user.boards, currBoard, boardName)
 	if currBoard in current_user.boards:
 		print("One step closer")
-		query = Note.query.filter_by(boardName=boardName).order_by(db.desc(Note.date)).all()
-		print(query)
+		page = request.args.get('page', 1, type=int)
+		query = Note.query.filter_by(boardName=boardName).order_by(db.desc(Note.date)).paginate(page=page, per_page=ROWS_PER_PAGE)
+		# print(query)
 		return render_template("userBoard.html", user=current_user, query=query, boardName=boardName)
 	else:
 		flash("You do not have access to view", category="error")
