@@ -40,12 +40,14 @@ def edit():
 			else:
 				# print("adding image") # debug
 				dataPIL = Image.open(io.BytesIO(data))
+				if dataPIL.mode in ("RGBA", "P"): 
+					dataPIL = dataPIL.convert("RGB")
 				w, h = dataPIL.size
 				resized_width = 624
 				resized_height = int((resized_width / w) *h)
 				dataPIL = dataPIL.resize((resized_width, resized_height), Image.NEAREST)
 				buffered = io.BytesIO()
-				dataPIL.save(buffered, format="PNG")
+				dataPIL.save(buffered, format="JPEG")
 				buffered.seek(0)
 
 				base64Img = b64encode(buffered.read()).decode("ascii")

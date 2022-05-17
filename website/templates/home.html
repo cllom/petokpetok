@@ -11,9 +11,15 @@
 		{% if note.img is not none %}
 			<img src="data:image/jpeg;base64,{{ note.img }}" width="100px" />
 		{% endif %}
+		{% if board==None %}
 		<button class="close" type="button" onclick="deleteNote({{ note.id }})">
 			<span aria-hidden="true">&times;</span>
 		</button>
+		{% else %}
+		<button class="close" type="button" onclick="deleteBoardNote({{ note.id }}, '{{ board }}')">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		{% endif %}
 	</li>
 	{% endif %}
 	{% endfor %}
@@ -22,12 +28,14 @@
 
 <form method="post" enctype="multipart/form-data">
 	
-
+	<div class="invisible">
+		<img id="img-preview" src="" alt="your image" class="mx-auto d-block"/>
+	</div>
 	<textarea name="note" id="note" class="form-control my-2"></textarea>
 	<div align="center">
 		<button type="submit" class="btn btn-primary my-1">Add Event</button>
 		<label for="image-upload" class="btn btn-dark my-1">Upload image to Event
-			<input type="file" name="image-upload" id="image-upload" accept="image/png, image/jpeg" hidden>
+			<input type="file" name="image-upload" id="image-upload" accept="image/png, image/jpeg" onchange="readURL(this);" hidden>
 		</label>
 	</div>
 </form>
